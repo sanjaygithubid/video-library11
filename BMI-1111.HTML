@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+   <link rel="stylesheet" href="../../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+   <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
+   <script src="../../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        function calculateBMI() {
+            var age = parseInt(document.getElementById("age").value);
+            var height = parseFloat(document.getElementById("height").value) / 100; // Convert height to meters
+            var weight = parseInt(document.getElementById("weight").value);
+
+            // Validation check
+            if (isNaN(age) || age <= 0 || age > 120 || isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                document.getElementById("result").innerHTML = `<div class="alert alert-danger">Please fill in all fields correctly.</div>`;
+                return;
+            }
+
+            var bmi = weight / (height * height);
+            let category;
+
+            // Determine BMI category
+            if (bmi < 18.5) {
+                category = 'Underweight';
+            } else if (bmi < 24.9) {
+                category = 'Normal weight';
+            } else if (bmi < 29.9) {
+                category = 'Overweight';
+            } else {
+                category = 'Obesity';
+            }
+
+            // Display result
+            document.getElementById("result").innerHTML = `
+                <div class="alert alert-info">
+                    Your BMI is: ${bmi.toFixed(2)}<br>Category: ${category}
+                </div>`;
+
+            // Move the "You" marker on the progress bar
+            let bmiPosition = Math.min(bmi, 40) * 2.5; // Scale BMI to fit progress bar width (assuming 40 is max)
+            document.getElementById("you").style.left = bmiPosition + "%";
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: aquamarine;
+            line-height: 1.5;
+        }
+
+        .container {
+            height: 600px;
+            width: 900px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            font-family: Arial;
+        }
+
+        .progress {
+            height: 30px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        #you {
+            position: absolute;
+            top: 0;
+            font-size: 20px;
+            color: red;
+            transform: translate(-50%, -100%);
+        }
+    </style>
+</head>
+
+<body class="container-fluid">
+    <div class="container">
+        <h2 class="text-center mt-2 p-2">BMI Calculator <span class="bi bi-calculator-fill"></span></h2>
+
+        <div class="ps-3 pt-2">
+            <!-- Gender Selection with Radio Buttons -->
+            <div>
+                <input type="radio" name="gender" id="male" class="form-check-input" value="Male"><label for="male"> Male</label>
+                <input type="radio" name="gender" id="female" class="form-check-input" value="Female"><label for="female"> Female</label>
+            </div>
+
+            <!-- Age Input -->
+            <div class="pt-4">
+                <label class="fs-5 fw-bold">Age:</label>
+                <input type="number" id="age" class="form-control w-25">
+            </div>
+
+            <!-- Height Input -->
+            <div class="py-4">
+                <label class="fs-5 fw-bold">Height (in cm):</label>
+                <input type="number" id="height" step="0.01" class="form-control w-25">
+            </div>
+
+            <!-- Weight Input -->
+            <div class="pb-4">
+                <label class="fs-5 fw-bold">Weight (in kg):</label>
+                <input type="number" id="weight" class="form-control w-25">
+            </div>
+
+            <!-- Calculate Button -->
+            <div>
+                <button class="btn btn-primary mt-5" onclick="calculateBMI()">Calculate</button>
+            </div>
+
+            <!-- Result Display -->
+            <div id="result" class="result"></div>
+
+            <!-- BMI Category Progress Bar -->
+            <div class="progress position-relative">
+                <div class="progress-bar bg-info" style="width:25%">Underweight</div>
+                <div class="progress-bar bg-success ms-1" style="width:25%">Normal</div>
+                <div class="progress-bar bg-warning ms-1" style="width:25%">Overweight</div>
+                <div class="progress-bar bg-danger ms-1" style="width:25%">Obese</div>
+
+                <!-- "You" marker -->
+                <div id="you" class="bi bi-triangle-fill">You</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
